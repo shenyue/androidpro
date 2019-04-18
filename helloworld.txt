@@ -57,7 +57,7 @@
 - Android Studio：Android开发集成环境（IDE）。
 
 ####经典的Hello World
-*activity_hello_world.xmll*
+*activity_hello_world.xml*
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout 
