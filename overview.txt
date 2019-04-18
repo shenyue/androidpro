@@ -1,0 +1,59 @@
+####Android历史
+>2003年10月，Andy Rubin等人一起创办了Android公司。
+>2005年8月，谷歌收购了这家公司。
+>2008年，谷歌推出了Android的第一个版本，之后安卓就受到重重阻挠。
+>首先，乔布斯说Android抄袭苹果的iOS，声称要毁掉安卓。
+>2010年，基于Linux的安卓被Linux团队从Linux内核主线中除名。
+>又由于安卓使用Java开发，甲骨文对Android侵犯Java知识产权对谷歌提起了诉讼。
+>。。。
+
+####Android系统架构
+- Linux内核层：对硬件提供底层驱动。如显示，音频，照相机，蓝牙，WiFi，电源管理等驱动。
+- 系统运行库层：通过C/C++库提供了主要特性支持。如SQLite库提供了对数据库支持，OpenGL/ES提供了对3D绘图支持，Webkit库提供了浏览器内核支持，Android运行时库，提供了一些核心库，允许开发者使用Java语言编写Android应用。运行时库包含了Dalvik虚拟机（5.0之后改成了ART运行环境）。
+- 应用框架层：提供了构建应用的各种API。
+- 应用层：Android已经提供的App。
+![安卓系统架构](https://upload-images.jianshu.io/upload_images/15047809-7f3f9f17b10a2c49.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+####Android版本
+- 1.0       1     （无）
+- 1.1       2       Petit Four（茶点）
+- 1.5       3       Cupcake（纸杯蛋糕）
+- 1.6       4       Donut（甜甜圈）
+- 2.0       5       Éclair（手指饼）
+- 2.0.1     6
+- 2.1       7
+- 2.2       8       Froyo（冻酸奶）
+- 2.3       9       Gingerbread（姜饼）
+- 2.3.3     10
+- 3.0       11     Honeycomb（蜂巢）
+- 3.1       12
+- 3.2       13
+- 4.0       14     Ice Cream Sandwich（冰激凌三明治）
+- 4.0.1     15
+- 4.1       16     Jelly Bean（果冻豆）
+- 4.2       17
+- 4.3       18
+- 4.4       19     Kitkat（奇巧巧克力）
+- 4.4       20     W（）
+- 5.0       21     Lollipop（棒棒糖）
+- 5.1       22     Lollipop（棒棒糖）
+- 6.0       23     Marshmallow（棉花糖）
+- 7.0       24     Nougat （牛轧糖）
+- 7.1       25
+- 8.0       26     Oreo（奥利奥）
+- 8.1       27
+- 9.0       28     Pie（馅饼）
+
+####Android开发四大组件
+- 活动（Activity）：App中你看到的东西，基本都在活动中。
+- 服务（Service）：通常后台运行。
+- 广播接收器（Broadcast Receiver）：接收广播，如电话，短信等。
+- 内容提供器（Content Provider）：App之间共享数据。
+
+####Android开发环境
+需要下载安卓以下工具包及开发环境
+- JDK：Java开发工具包。
+- Android SDK：Android开发工具包。
+- Android Studio：Android开发集成环境（IDE）。
+
+---
