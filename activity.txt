@@ -1,0 +1,81 @@
+####活动Activity
+四大组件之一，它包含用户界面组件，用于同用户交互。
+每个Activity都会有一个对应的布局文件，采用MVC分层设计。
+>**M（Model）：**模型层，业务逻辑等。
+>**V（View）：**视图层，展示组件等。
+>**C（Controller）：**控制层，程序流程控制等。
+
+####创建Activity
+包（右键） >> New >> Activity >> Empty Activity
+输入Activity名称，点击Finish，此时系统自动创建一个Activity文件和一个与之对应的layout文件。
+
+####代码解析
+*activity_hello_world.xml*
+
+---
+```
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter01.HelloWorldActivity">
+
+    <TextView
+        android:id="@+id/tv_hw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"/>
+
+</android.support.constraint.ConstraintLayout>
+```
+**android:id：**设置id，组件全局唯一id，用于确定该组件。
+
+**android:layout_width：**设置宽度。
+**android:layout_height：**设置高度。
+- *match_parent*：与父控件同宽或高。
+- *wrap_content*：与其内容同宽或高。
+- *100dp*：固定宽或高。
+
+**android:gravity：**对齐方式。
+- *center_horizontal*：水平居中。
+此值有很多，自己查手册吧。
+
+*HelloWorldActivity.java*
+
+---
+```
+public class HelloWorldActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 设置layout布局文件
+        setContentView(R.layout.activity_hello_world);
+
+        // 查找id为tv_hw的文本标签组件
+        TextView tv_hw = findViewById(R.id.tv_hw);
+        // 设置文本内容
+        tv_hw.setText("Hello World");
+    }
+}
+```
+**R：**项目资源管理文件。项目中添加的任何资源，在R文件中都会生成一个id。
+**layout：**布局类，R的内部静态类。
+**activity_hello_world：**为id，与Activity对应的layout文件同名。
+**setContentView()：**调用此方法，加载布局文件。
+**findViewById()：**获取对应id的组件。
+**TextView**：文本标签。
+**setText()：**设置文本内容。
+
+*AndroidManifest.xml*
+
+---
+每个新建的Activity都要在 **AndroidManifest.xml** 进行注册，否则不能使用。
+由于我们是用IDE创建的，则自动注册完成。
+```
+<activity android:name=".chapter01.HelloWorldActivity"></activity>
+```
+**android:name：**Activity的名称，需要完成路径名。
