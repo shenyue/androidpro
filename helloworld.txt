@@ -1,63 +1,47 @@
-####Android历史
->2003年10月，Andy Rubin等人一起创办了Android公司。
->2005年8月，谷歌收购了这家公司。
->2008年，谷歌推出了Android的第一个版本，之后安卓就受到重重阻挠。
->首先，乔布斯说Android抄袭苹果的iOS，声称要毁掉安卓
->2010年，基于Linux的安卓被Linux团队从Linux内核主线中除名。
->又由于安卓使用Java开发，甲骨文对Android侵犯Java知识产权对谷歌提起了诉讼
->。。。
+###经典的HelloWorld
+####创建项目
+*File >> New >> New Project >> Empty Activity*
+*Name >> Package name >> Minimum API level >> Finish*
+点击菜单栏的File，点击New，点击NewProject，选择EmptyActivity。
+输入项目名称，包名称，支持最小API版本，点击Finish。
+- 项目名：字母数字下划线组合，请勿数字开头。
+- 包名：公司，个人主页域名倒序。例如：project.sheyue.com >> com.shenyue.project。
+- 支持最小版本API：默认API 21，Android 5.0，可选择其他版本，目前最新API 28 Android 9.0。
 
-####Android系统架构
-- Linux内核层：对硬件提供底层驱动。如显示，音频，照相机，蓝牙，WiFi，电源管理等驱动。
-- 系统运行库层：通过C/C++库提供了主要特性支持。如SQLite库提供了对数据库支持，OpenGL/ES提供了对3D绘图支持，Webkit库提供了浏览器内核支持，Android运行时库，提供了一些核心库，允许开发者使用Java语言编写Android应用。运行时库包含了Dalvik虚拟机（5.0之后改成了ART运行环境）。
-- 应用框架层：提供了构建应用的各种API。
-- 应用层：Android已经提供的App。
-![安卓系统架构](https://upload-images.jianshu.io/upload_images/15047809-7f3f9f17b10a2c49.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+####项目结构
+![项目结构](https://upload-images.jianshu.io/upload_images/15047809-4374c53e384a8a93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+项目结构的浏览可用多种组织方式，在此选择Android模式。
+最外层**app**和**Gradle Scripts**
 
-####Android版本
-- 1.0       1     （无）
-- 1.1       2       Petit Four（茶点）
-- 1.5       3       Cupcake（纸杯蛋糕）
-- 1.6       4       Donut（甜甜圈）
-- 2.0       5       Éclair（手指饼）
-- 2.0.1     6
-- 2.1       7
-- 2.2       8       Froyo（冻酸奶）
-- 2.3       9       Gingerbread（姜饼）
-- 2.3.3     10
-- 3.0       11     Honeycomb（蜂巢）
-- 3.1       12
-- 3.2       13
-- 4.0       14     Ice Cream Sandwich（冰激凌三明治）
-- 4.0.1     15
-- 4.1       16     Jelly Bean（果冻豆）
-- 4.2       17
-- 4.3       18
-- 4.4       19     Kitkat（奇巧巧克力）
-- 4.4       20     W（）
-- 5.0       21     Lollipop（棒棒糖）
-- 5.1       22     Lollipop（棒棒糖）
-- 6.0       23     Marshmallow（棉花糖）
-- 7.0       24     Nougat （牛轧糖）
-- 7.1       25
-- 8.0       26     Oreo（奥利奥）
-- 8.1       27
-- 9.0       28     Pie（馅饼）
+app中
+- manifests > AndroidManifest.xml：项目配置文件，四大组件注册，添加权限声明。
+- java > com.bl.blandroidpro：项目主目录，也是我们主要代码放置区。模块，Activity，Service，工具类等。
+- java > com.bl.blandroidpro（androidTest）：测试用例。
+- res  > drawable：项目用图片文件。
+- res > layout：项目用布局文件。
+- res > mipmap：项目用启动界面文件。
+- res > values：colors.xml颜色管理，strings.xml文本管理，styles.xml式样管理等。
 
-####Android开发四大组件
-- 活动（Activity）：App中你看到的东西，基本都在活动中
-- 服务（Service）：通常后台运行
-- 广播接收器（Broadcast Receiver）：接收广播，如电话，短信等
-- 内容提供器（Content Provider）：App之间共享数据
+Gradle Scripts中
+- Android通过Gradle进行管理。Gradle配置文件，详情后续再述。
 
-####Android开发环境
-需要下载安卓以下工具包及开发环境
-- JDK：Java开发工具包
-- Android SDK：Android开发工具包
-- Android Studio：Android开发集成环境（IDE）。
+####活动Activity
+四大组件之一，它包含用户界面组件，用于同用户交互。
+每个Activity都会有一个对应的布局文件，采用MVC分层设计。
+>**M（Model）：**模型层，业务逻辑等。
+>**V（View）：**视图层，展示组件等。
+>**C（Controller）：**控制层，程序流程控制等。
 
-####经典的Hello World
+####创建Activity
+*包（右键） >> New >> Activity >> Empty Activity*
+*输入Activity名称，点击Finish，此时系统自动创建一个Activity文件和一个与之对应的layout文件。*
+
+####主要文件源码分析
+---
+**布局文件**
 *activity_hello_world.xml*
+
+---
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout 
@@ -76,23 +60,57 @@
 
 </android.support.constraint.ConstraintLayout>
 ```
+**android:id：**设置id，组件全局唯一id，用于确定该组件。
+
+**android:layout_width：**设置宽度。
+**android:layout_height：**设置高度。
+- *match_parent*：与父控件同宽或高。
+- *wrap_content*：与其内容同宽或高。
+- *100dp*：固定宽或高。
+
+**android:gravity：**对齐方式。
+- *center_horizontal*：水平居中。
+此值有很多，自己查手册吧。
+
+---
+**Activity文件**
 *HelloWorldActivity.java*
+
+---
 ```
 public class HelloWorldActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 加载layout文件
-        setContentView(R.layout.activity_hello_world); 
-        // 获取文本标签组件
-        TextView tv_hw = findViewById(R.id.tv_hw); 
+        // 设置layout布局文件
+        setContentView(R.layout.activity_hello_world);
+
+        // 查找id为tv_hw的文本标签组件
+        TextView tv_hw = findViewById(R.id.tv_hw);
         // 设置文本内容
-        tv_hw.setText("Hello World"); 
+        tv_hw.setText("Hello World");
     }
 }
 ```
+**R：**项目资源管理文件。项目中添加的任何资源，在R文件中都会生成一个id。
+**layout：**布局类，R的内部静态类。
+**activity_hello_world：**为id，与Activity对应的layout文件同名。
+**setContentView()：**调用此方法，加载布局文件。
+**findViewById()：**获取对应id的组件。
+**TextView**：文本标签。
+**setText()：**设置文本内容。
 
+---
+**项目配置文件**
+*AndroidManifest.xml*
 
+---
+每个新建的Activity都要在 **AndroidManifest.xml** 进行注册，否则不能使用。
+由于我们是用IDE创建的，则自动注册完成。
+```
+<activity android:name=".chapter01.HelloWorldActivity"></activity>
+```
+**android:name：**Activity的名称，需要完成路径名。
 
-
+---
