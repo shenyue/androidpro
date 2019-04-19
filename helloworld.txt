@@ -41,7 +41,6 @@ Gradle Scripts中
 **布局文件**
 *activity_hello_world.xml*
 
----
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout 
@@ -76,7 +75,6 @@ Gradle Scripts中
 **Activity文件**
 *HelloWorldActivity.java*
 
----
 ```
 public class HelloWorldActivity extends AppCompatActivity {
 
@@ -105,7 +103,6 @@ public class HelloWorldActivity extends AppCompatActivity {
 **项目配置文件**
 *AndroidManifest.xml*
 
----
 每个新建的Activity都要在 **AndroidManifest.xml** 进行注册，否则不能使用。
 由于我们是用IDE创建的，则自动注册完成。
 ```
