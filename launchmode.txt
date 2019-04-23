@@ -1,0 +1,34 @@
+####4种启动模式
+**android:launchMode** 设置activity标签的此属性。
+- **standard：**标准启动模式，系统默认。每次启动一个的activity时，都会创建一个新实例入栈顶。
+- **singleTop：**当某活动在栈顶，再次启动它时，直接使用它，而不再创建新实例。
+- **singleTask：**当启动该活动时，检查返回栈中是否存在该活动的实例，如果存在，则直接使用它，并将其上的活动统统出栈，保证同一任务中，仅有该活动的一个实例。
+- **singleInstance：**此模式会创建一个新的返回栈来管理此活动。
+```
+<activity android:name=".chapter02.LaunchModeSingleTopActivity"
+    android:label="LaunchModeSingleTopActivity"
+    android:launchMode="singleTop" />
+```
+
+####知晓当前在哪个互动中
+```
+// 活动中，调用如下方法，获得当前活动名称。
+getClass().getSimpleName();
+```
+
+####启动活动的最佳写法
+这样写其他开发人员就知道要启动此Activity需要哪些参数，一目了然。
+```
+// 在FirstActivity中
+SecondActivity.actionStart(FirstActivity.this, "参数1", 2);
+
+// 在SecondActivity中
+public static void actionStart(Context context, String param1, int param2) {
+    Intent intent = new Intent(context, SecondActivity.class);
+    intent.putExtra("key1", param1);
+    intent.putExtra("key2", param2);
+    context.startActivity(intent);
+}
+```
+
+---
