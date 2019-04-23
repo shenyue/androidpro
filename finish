@@ -1,0 +1,78 @@
+####Finish Activity
+```
+// 调用activity的finish方法，结束活动。则该activity从栈中移除。
+finish();
+```
+
+####Finish Process
+```
+// 调用系统提供的killProcess方法，传递一个Process ID。
+// 用android.os.Process.myPid()此方法获得当前App的进程ID。
+android.os.Process.killProcess(android.os.Process.myPid());
+```
+
+####代码示例
+activity_finish.xml
+```
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter02.FinishActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_finishActivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="销毁Activity" />
+
+            <Button
+                android:id="@+id/btn_finishApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="杀掉该进程" />
+            
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
+```
+FinishActivity.java
+```
+public class FinishActivity extends MyBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_finish);
+
+        // 销毁当前activity
+        Button btn_finishActivity = findViewById(R.id.btn_finishActivity);
+        btn_finishActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FinishActivity.this, "您销毁了这个Activity", Toast.LENGTH_LONG).show();
+                // 手动销毁activity
+                finish();
+            }
+        });
+
+        // 杀掉进程 该代码配合杀掉所有活动使用
+        Button btn_finishApp = findViewById(R.id.btn_finishApp);
+        btn_finishApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        });
+    }
+```
