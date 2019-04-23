@@ -12,6 +12,7 @@ android.os.Process.killProcess(android.os.Process.myPid());
 ```
 
 ####代码示例
+---
 activity_finish.xml
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -46,6 +47,7 @@ activity_finish.xml
 
 </android.support.constraint.ConstraintLayout>
 ```
+---
 FinishActivity.java
 ```
 public class FinishActivity extends MyBaseActivity {
@@ -76,3 +78,4 @@ public class FinishActivity extends MyBaseActivity {
         });
     }
 ```
+---
