@@ -1,0 +1,383 @@
+####Intent
+>Intent是Android程序组件之间交互的一种重要方式，可以指明当前组件要执行的动作，还可以在组件间传递数据。
+>他被用于启动活动，启动服务和发送广播等场景，Intent有多个构造函数的重载。
+
+####使用方式
+- 显示Intent
+- 隐式Intent
+
+####使用显示的Intent
+```
+Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+startActivity(intent);
+```
+**Intent(Context context, Class<?>cls)：**是构造函数其中的一个重载。
+第一个参数是启动活动的上下文，第二个是想要启动的目标活动。
+**startActivity(Intent intent)：**是启动活动的方法。
+此种方式启动活动的、，意图非常明显，所以称**显示Intent**。
+
+####使用隐式的Intent
+隐式intent通过在**AndroidManifest.xml**中的<activity>标签配置<action>标签和<category>标签等信息，然后系统自动分析使用。
+```
+<activity android:name=".chapter02.IntentImplicitActivity">
+    <intent-filter>
+        <action android:name="com.bl.blandroidpro.ACTION_START" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="com.bl.blandroidpro.MY_CATEGORY" />
+    </intent-filter>
+</activity>
+```
+```
+Intent intent = new Intent("com.bl.blandroidpro.ACTION_START");
+intent.addCategory("com.bl.blandroidpro.MY_CATEGORY");
+```
+**Intent(String action)：**是构造函数的另一个重载，以一个action字符串作为参数。
+**intent.addCategory(String category)：**通过此函数添加新的类别，别忘了在activity 标签中进行配置，否则程序崩溃。
+
+####使用Intent打开网页
+```
+Intent intent = new Intent(Intent.ACTION_VIEW);
+intent.setData(Uri.parse("https://www.baidu.com"));
+startActivity(intent);
+```
+**Intent.ACTION_VIEW：**是安卓系统的内置动作，其常量值为**android.intent.action.VIEW**。
+**intent.setData(Uri uri)：**将字符串解析成Uri，再通过setData方法传递进去。
+**<data>标签：**用于更精确的指定当前活动能够响应什么类型的数据。
+- **android:scheme**  指定协议。
+- **android:host**  指定主机名。
+- **android:port**  指定端口。
+- **android:path**  指定路径。
+- **android:mimeType**  指定可以处理的数据类型。
+```
+<activity android:name=".chapter02.IntentOpenWebActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="https" />
+    </intent-filter>
+</activity>
+```
+
+####使用Intent打电话
+```
+Intent intent = new Intent(Intent.ACTION_DIAL);
+intent.setData(Uri.parse("tel:10086"));
+startActivity(intent);
+```
+
+####使用Intent传递数据给下一个活动
+**putExtra(String key, Object value)：**通过使用此方法进行设置
+```
+// 第一个活动
+Intent intent = new Intent(FristActivity.this, SecondActivity.class);
+intent.putExtra("transmit_data_1", "Hello");
+intent.putExtra("transmit_data_2", new String[]{"World!"});
+intent.putExtra("transmit_data_3", 333});
+startActivity(intent);
+```
+**从Intent中获取数据**
+```
+// 第二个活动
+Intent intent = getIntent();
+String data_1 = intent.getStringExtra("transmit_data_1");
+String[] data_2 = intent.getStringArrayExtra("transmit_data_2");
+int data_3 = intent.getIntExtra("transmit_data_3");
+```
+**getIntent()：**获取当前intent。
+**getXXXExtra()：**获取对应类型的数据。
+
+####返回数据给上一个活动
+```
+// 第一个Activity
+Intent intent = new Intent(FristActivity.this, SecondActivity.class);
+startActivityForResult(intent, 1);
+
+// 接收返回的数据
+@Override
+protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    switch (requestCode) {
+        case 1:
+            if (resultCode == RESULT_OK) {
+                String[] res = data.getStringArrayExtra("feedback_data");
+                tv_intent_res.setText(res[0] + res[1]);
+            }
+            break;
+        default:
+            break;    
+    }
+}
+```
+```
+// 第二个Activity
+Intent intent = new Intent();
+intent.putExtra("key1", "测试数据");
+setResult(RESULT_OK, 1);
+finish();
+
+@Override
+public void onBackPressed() {
+    Intent intent = new Intent();
+    intent.putExtra("feedback_data", new String[]{"Yes, I", " konw!"});
+    setResult(RESULT_OK, intent);
+    finish();
+}
+```
+**startActivityForResult()：**使用此方法启动activity表示此活动要接收返回的数据。
+**onActivityResult()：**重写此方法接收返回的Intent中的数据。
+- requestCode：启动活动时的请求码。
+- resultCode：返回数据时的处理结果。
+- data：返回数据的intent。
+
+**setResult()：**将intent设置到result中。
+**onBackPressed()：**重写此方法，用户点返回键时调用此方法。
+
+####代码示例
+
+---
+*AndroidManifest.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bl.blandroidpro">
+
+    <application
+        android:name=".chapter13.BLApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <activity android:name=".chapter02.FirstActivity" />
+        <activity android:name=".chapter02.SecondActivity">
+            <intent-filter>
+                <action android:name="com.bl.blandroidpro.ACTION_START" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.bl.blandroidpro.MY_CATEGORY" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chapter02.IntentOpenWebActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+    </application>
+```
+---
+*activity_first.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/my_nav" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_intent_explicit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="使用显示Intent" />
+
+            <Button
+                android:id="@+id/btn_intent_implicit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="使用隐式Intent" />
+
+            <Button
+                android:id="@+id/btn_intent_web"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="打开网页 百度" />
+
+            <Button
+                android:id="@+id/btn_intent_tel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="打电话 10086" />
+
+            <Button
+                android:id="@+id/btn_intent_transmit_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="使用 Intent 传递数据" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="反馈回来的数据"/>
+            <TextView
+                android:id="@+id/tv_intent_res"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <WebView
+                android:id="@+id/wv_intent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:padding="0dp"
+                android:background="#666"></WebView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*FirstActivity.java*
+```
+public class FirstActivity extends MyBaseActivity {
+
+    TextView tv_intent_res;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_first);
+
+        // 使用 显示Intent
+        Button btn_intent_show = findViewById(R.id.btn_intent_explicit);
+        btn_intent_show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Intent 有很多构造函数，像这种意图很明显，称为显示 Intent
+                Intent intent = new Intent(IntentActivity.this, IntentExplicitActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 使用 隐式Intent
+        Button btn_intent_implicit = findViewById(R.id.btn_intent_implicit);
+        btn_intent_implicit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 在 AndroidManifest.xml 中 activity 标签中设置 action 及 category
+                // 在 action 和 category 同时匹配下才可执行
+                // 这种通过系统分析你要做什么的形式称为 隐式 Intent
+                // 此处添加 action 字符串
+                Intent intent = new Intent("com.bl.blandroidpro.ACTION_START");
+                // 此处添加自定义的 category，default 为默认的，不需要添加
+                intent.addCategory("com.bl.blandroidpro.MY_CATEGORY");
+                startActivity(intent);
+            }
+        });
+
+        // 打开 网页
+        Button btn_intent_web = findViewById(R.id.btn_intent_web);
+        btn_intent_web.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://www.baidu.com"));
+                startActivity(intent);
+            }
+        });
+
+        // 打电话
+        Button btn_intent_tel = findViewById(R.id.btn_intent_tel);
+        btn_intent_tel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:10086"));
+                startActivity(intent);
+            }
+        });
+
+        // Activity 之间 使用 Intent 传递数据
+        Button btn_intent_transmit_data = findViewById(R.id.btn_intent_transmit_data);
+        btn_intent_transmit_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(IntentActivity.this, IntentTransmitDataActivity.class);
+                intent.putExtra("transmit_data_1", "Hello");
+                intent.putExtra("transmit_data_2", new String[]{"World!"});
+                startActivityForResult(intent, 1);
+            }
+        });
+        
+        // 显示结果
+        tv_intent_res = findViewById(R.id.tv_intent_res);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    String[] res = data.getStringArrayExtra("feedback_data");
+                    tv_intent_res.setText(res[0] + res[1]);
+                }
+                break;
+                default:
+        }
+    }
+
+}
+```
+---
+*SecondActivity.java*
+```
+public class SecondActivity extends AppCompatActivity {
+
+    TextView tv_transmit_data;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+
+        Intent intent = getIntent();
+        String data_1 = intent.getStringExtra("transmit_data_1");
+        String[] data_2 = intent.getStringArrayExtra("transmit_data_2");
+
+        tv_transmit_data = findViewById(R.id.tv_transmit_data);
+        tv_transmit_data.setText(data_1 + " " + data_2[0]);
+
+        Button btn_feedback = findViewById(R.id.btn_feedback);
+        btn_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("feedback_data", new String[]{"Yes, I", " konw!"});
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+    }
+
+    /**
+     * 点击返回按钮时 反馈数据回去
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("feedback_data", new String[]{"Yes, I", " konw!"});
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+}
+```
+
+---
+
+
+
+
+
+
