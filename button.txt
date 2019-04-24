@@ -4,8 +4,8 @@
 ####属性
 - **android:id：**ID，唯一标识符。
 - **android:layout_width：**宽。
-*match_parent：*当前控件大小和父控件一样。
-*wrap_content：*当前控件大小刚好包含里边内容。
+    *match_parent：*当前控件大小和父控件一样。
+    *wrap_content：*当前控件大小刚好包含里边内容。
 - **android:layout_height：**高，同上。
 - **android:text：**文本信息。
 - **android:textSize：**文本字号。
