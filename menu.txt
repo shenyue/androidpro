@@ -1,0 +1,83 @@
+####Menu 菜单
+>res文件夹下，新建menu文件夹，将菜单xml放入其中。
+
+---
+####示例代码
+*main.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/add_item"
+        android:title="Add"
+        android:icon="@drawable/add"
+        app:showAsAction="always"/>
+    <item android:id="@+id/remove_item"
+        android:title="Remove"
+        android:icon="@drawable/remove"
+        app:showAsAction="never"/>
+</menu>
+```
+---
+
+*activity_com_menu.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <android.support.v7.widget.Toolbar
+        android:id="@+id/mb_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+</LinearLayout>
+```
+---
+
+*MenuActivity.java*
+```
+public class MenuActivity extends MyBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_com_menu);
+
+        toolBar = findViewById(R.id.mb_toolbar);
+        setSupportActionBar(toolBar);
+    }
+
+    // 重写创建菜单方法 onCreateOptionsMenu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 加载菜单
+        getMenuInflater().inflate(R.menu.main, menu);
+        // return true允许显示菜单
+        return true;
+    }
+
+    // 重写菜单选择方法 onOptionsItemSelected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        // 匹配点击哪个菜单项
+        switch (item.getItemId()) {
+            case R.id.add_item:
+                Toast.makeText(this, "You Clicked Add", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.remove_item:
+                Toast.makeText(this, "You Clicked Remove", Toast.LENGTH_LONG).show();
+                break;
+            default:
+        }
+        return true;
+    }
+}
+
+```
+
+---
