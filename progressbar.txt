@@ -1,0 +1,121 @@
+####ProgressBar 进度条
+> 进度条
+
+####属性
+- **android:id：**ID，唯一标识符。
+- **android:layout_width：**宽。
+ *match_parent：*当前控件大小和父控件一样。
+ *wrap_content：*当前控件大小刚好包含里边内容。
+- **android:layout_height：**高，同上。
+- **android:visibility：**显示还是隐藏。
+ *visible：*可见，默认值。
+ *invisible：*不可见，但占据原来位置和大小。
+ *gone：*不可见，不占用任何空间。
+- **style：**式样。
+ *?android:attr/progressBarStyleHorizontal：*水平进度条。
+- **android:max：**最大值。
+
+---
+####示例代码
+*activity_com_progress_bar.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter03.ProgressBarActivity"
+    android:orientation="vertical">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_pb_display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="隐藏 ProgressBar"/>
+
+            <ProgressBar
+                android:id="@+id/pb_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_pb_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="增加 ProgressBar 进度"
+                android:textAllCaps="false"/>
+
+            <ProgressBar
+                android:id="@+id/pb_progress_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+
+---
+
+*ProgressBarActivity.java*
+```
+public class ProgressBarActivity extends MyBaseActivity {
+
+    ProgressBar pb_progressbar;
+    ProgressBar pb_progress_horizontal;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_com_progress_bar);
+
+        pb_progressbar = findViewById(R.id.pb_progress);
+
+        Button btn_pb_display = findViewById(R.id.btn_pb_display);
+        btn_pb_display.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.btn_pb_display:
+                        if (pb_progressbar.getVisibility() == View.GONE) {
+                            pb_progressbar.setVisibility(View.VISIBLE);
+                        } else {
+                            pb_progressbar.setVisibility(View.GONE);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        pb_progress_horizontal = findViewById(R.id.pb_progress_horizontal);
+
+        Button btn_pb_progress = findViewById(R.id.btn_pb_progress);
+        btn_pb_progress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int progress = pb_progress_horizontal.getProgress();
+                progress = progress + 10;
+                pb_progress_horizontal.setProgress(progress);
+            }
+        });
+    }
+}
+```
+
+---
