@@ -4,18 +4,18 @@
 ####属性
 - **android:id：**ID，唯一标识符。
 - **android:layout_width：**宽。
-  *match_parent：*当前控件大小和父控件一样。
-  *wrap_content：*当前控件大小刚好包含里边内容。
+ *match_parent：*当前控件大小和父控件一样。
+ *wrap_content：*当前控件大小刚好包含里边内容。
 - **android:layout_height：**高，同上。
 - **android:text：**文本信息。
 - **android:textSize：**文本字号。
 - **android:textColor：**文本颜色。
 - **android:gravity：**文字对齐方式，可用 | 指定多个值
-  *top：*顶对齐
-  *bottom：*底对齐
-  *left：*左对齐
-  *right：*右对齐
-  *center：*居中
+ *top：*顶对齐
+ *bottom：*底对齐
+ *left：*左对齐
+ *right：*右对齐
+ *center：*居中
 - **android:shadowColor：**阴影颜色。
 - **android:shadowRadius：**阴影半径。
 - **android:shadowDy：**阴影纵轴向偏移。
