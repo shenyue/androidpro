@@ -55,3 +55,30 @@
 ```
 
 ---
+
+*ButtonActivity.java*
+```
+public class ButtonActivity extends MyBaseActivity {
+
+    Button btn_button;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_com_button);
+
+        btn_button = findViewById(R.id.btn_button);
+        btn_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ButtonActivity.this, "You clicked button", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+}
+```
+**setOnClickListener()：**通过此方法设置点击监听。
+**View.OnClickListener()：**实例化一个匿名类，重写其**onClick()**方法，在其中编写点击按钮后的业务逻辑。
+
+---
