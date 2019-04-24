@@ -1,0 +1,57 @@
+####Button 按钮
+>按钮
+
+####属性
+- **android:text：**文本信息。
+- **android:textSize：**文本字号。
+- **android:textColor：**文本颜色。
+- **android:gravity：**文本对齐方式。
+- **android:shadowColor：**阴影颜色。
+- **android:shadowRadius：**阴影半径。
+- **android:shadowDy：**阴影纵轴向偏移。
+- **android:shadowDx：**阴影横轴偏移。
+- **android:textAllCaps：**文本信息是否大写。
+
+---
+####示例代码
+```
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter03.ButtonActivity">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This is a Button!"
+                android:textSize="24sp"
+                android:textColor="#ccffff"
+                android:gravity="center"
+                android:shadowColor="#000000"
+                android:shadowRadius="5"
+                android:shadowDy="3"
+                android:shadowDx="3"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
+```
+
+---
