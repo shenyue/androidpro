@@ -56,3 +56,24 @@
 
 </LinearLayout>
 ```
+
+---
+*TextViewActivity.java*
+```
+public class TextViewActivity extends MyBaseActivity {
+
+    TextView mTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_com_text_view);
+
+        mTextView = findViewById(R.id.tv_textview);
+        mTextView .setText("This is a TextView");
+    }
+
+}
+```
+
+---
