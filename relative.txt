@@ -211,7 +211,7 @@
 </LinearLayout>
 ```
 ---
-*RelativeActivity.java*
+*RelativeLayoutActivity.java*
 ```
 public class RelativeLayoutActivity extends MyBaseActivity {
 
