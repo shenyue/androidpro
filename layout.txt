@@ -3,11 +3,17 @@
 
 ![布局控件关系.jpg](https://upload-images.jianshu.io/upload_images/15047809-73d92b96a3edd166.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-Android有多种布局方案，其中基础布局有4种：
+####Android有多种布局方案，其中基础布局有4种
 - 线性布局（Linear Layout）
 - 相对布局（Relative Layout）
 - 帧布局（Frame Layout）
-- 百分比布局（Percent Layout）已废弃
+- 百分比布局（Percent Layout）（已废弃）
+
+####控件布局继承关系
+![控件布局继承关系.jpg](https://upload-images.jianshu.io/upload_images/15047809-c2aa5f566cbd243b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+>所有控件继承自View
+>所有布局继承自ViewGroup
+>ViewGroup继承自View
 
 接下来，开启我们的布局之旅吧！
 
