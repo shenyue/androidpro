@@ -1,0 +1,14 @@
+####Layout 布局
+>丰富的界面需要很多控件组成，但想要有条不紊的组织起来，则需要布局完成。
+
+![布局控件关系.jpg](https://upload-images.jianshu.io/upload_images/15047809-73d92b96a3edd166.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+Android有多种布局方案，其中基础布局有4种：
+- 线性布局（Linear Layout）
+- 相对布局（Relative Layout）
+- 帧布局（Frame Layout）
+- 百分比布局（Percent Layout）
+
+接下来，开启我们的布局之旅吧！
+
+---
