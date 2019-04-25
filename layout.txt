@@ -7,7 +7,7 @@ Android有多种布局方案，其中基础布局有4种：
 - 线性布局（Linear Layout）
 - 相对布局（Relative Layout）
 - 帧布局（Frame Layout）
-- 百分比布局（Percent Layout）
+- 百分比布局（Percent Layout）已废弃
 
 接下来，开启我们的布局之旅吧！
 
