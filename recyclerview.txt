@@ -71,10 +71,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <Button
+                    android:id="@+id/btn_acrv_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="垂直布局"/>
+                <Button
                     android:id="@+id/btn_acrv_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="横向布局"/>
+                    android:text="水平布局"/>
                 <Button
                     android:id="@+id/btn_acrv_staggeredgrid"
                     android:layout_width="wrap_content"
@@ -96,6 +101,18 @@ public class RecyclerViewActivity extends MyBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_com_recycler_view);
+
+        Button btn_acrv_vertical = findViewById(R.id.btn_acrv_vertical);
+        btn_acrv_vertical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayoutManager layoutManager = new LinearLayoutManager(RecyclerViewActivity.this);
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                rv_components.setLayoutManager(layoutManager);
+                FuritAdapter adpter = new FuritAdapter(list);
+                rv_components.setAdapter(adpter);
+            }
+        });
 
         Button btn_acrv_horizontal = findViewById(R.id.btn_acrv_horizontal);
         btn_acrv_horizontal.setOnClickListener(new View.OnClickListener() {
