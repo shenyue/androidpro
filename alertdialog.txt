@@ -1,0 +1,86 @@
+####AlertDialog 对话框
+> 在当前界面弹出一个对话框，它在所有界面元素之上，可以屏蔽掉其它元素的交互能力。
+
+---
+####示例代码
+
+*activity_com_alert_dialog.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter03.AlertDialogActivity"
+    android:orientation="vertical">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_makedialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AlertDialog" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+
+*AlertDialogActivity.java*
+```
+public class AlertDialogActivity extends MyBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_com_alert_dialog);
+
+        Button btn_makedialog = findViewById(R.id.btn_makedialog);
+        btn_makedialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialog =
+                        new AlertDialog.Builder(AlertDialogActivity.this);
+                // 设置标题
+                dialog.setTitle("This is Dialog");
+                // 设置内容
+                dialog.setMessage(" Message Content ");
+                // 出后会点击屏幕或物理返回键不消失
+                dialog.setCancelable(false);
+                // 设置确定
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(AlertDialogActivity.this,
+                                "Clicked OK", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                // 设置否定
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(AlertDialogActivity.this,
+                                "Clicked Cancel", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                // 显示
+                dialog.show();
+            }
+        });
+    }
+}
+```
+
+---
