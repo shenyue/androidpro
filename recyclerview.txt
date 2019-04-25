@@ -12,6 +12,20 @@
 - Layout 布局，视图以何种布局呈现。
 - DataSource 数据源集合，提供数据。
 
+####强大的布局
+- 水平滚动
+```
+// 仅仅将线性布局的方向切换下
+layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+```
+- 瀑布流
+```
+// 仅仅换种布局，第一个参数为列数，第二个参数为方向。
+StaggeredGridLayoutManager layoutManager =
+                        new StaggeredGridLayoutManager(3,
+                                StaggeredGridLayoutManager.VERTICAL);
+```
+
 ####示例代码
 >该代码将适配器与数据源以内部类的形式写在Activity中，可以单独写成独立文件。
 ---
