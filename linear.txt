@@ -1,0 +1,266 @@
+####LinearLayout 线性布局
+>线性布局是一种非常常用的布局，控件在该布局中按线性方向依次排列。
+
+####属性
+- **android:orientation：**排列方向。
+ *vertical：*垂直方向。
+ *horizontal：* 水平方向。
+> 注意：
+>当orientation=horizontal时，控件的layout_width属性值不能是match_parent，因为它的宽与父同宽，则其它控件无法显示了；
+>当orientation=vertical时，控件的layout_height属性值不能是match_parent，因为它的高与父同高，则其它控件也无法显示了。
+
+- **控件的android:layout_gravity：**控件在布局中的对齐方式。大家是否还记得**控件的android:gravity**，此属性是文字在控件内的对齐方式。
+ *top：*与父容器顶对齐。
+ *center_vertical：*父容器中垂直居中。
+ *bottom：*与父容器底对齐。
+ *left：*与父容器左对齐。
+ *center_horizontal：*父容器中水平居中。
+ *right：*与父容器右对齐。
+> 注意：
+>当orientation=horizontal时，仅top，center_vertical，bottom有效；
+>当orientation=vertical时，仅left，center_horizontal，right有效。
+
+- **控件的android:layout_weight：**此属性允许我们使用比例的方式指定控件大小。
+
+####示例代码
+---
+*activity_linear_layout.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter03.LinerLayoutActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/my_nav" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="垂直布置"
+                android:background="#eeeeee"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_liner_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 1"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 2"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 3"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="水平布置"
+                android:background="#eeeeee"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_liner_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 4"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 5"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 6"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="水平布置，控件设置layout_gravity = top | center_vertical | bottom"
+                android:background="#eeeeee"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_liner_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 7"
+                    android:layout_gravity="top"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 8"
+                    android:layout_gravity="center_vertical"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="Button 9"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="垂直布置，控件设置layout_gravity = left | center_horizontal | right"
+                android:background="#eeeeee"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_liner_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 10"
+                    android:layout_gravity="left"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 11"
+                    android:layout_gravity="center_horizontal"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btn_liner_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="Button 12"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="控件layout_width均为0dp，layout_weight均为1，两个控件宽度平分父容器宽度。"
+                android:background="#eeeeee"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Button 13"
+                    android:textAllCaps="false"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="EditText的layout_weight为1；Button的未设置，但layout_width为wrap_content，则Button宽度仅包裹内容，其余宽度给EditText。"
+                android:background="#eeeeee"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 14"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/wv_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:padding="0dp"
+                android:background="#666"></WebView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+
+---
+
+*LinearLayoutActivity.java*
+```
+public class LinearLayoutActivity extends MyBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_liner_layout);
+    }
+
+}
+```
+---
+
+
