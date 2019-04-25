@@ -35,8 +35,6 @@
     tools:context=".chapter03.LinerLayoutActivity"
     android:orientation="vertical">
 
-    <include layout="@layout/my_nav" />
-
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -232,14 +230,6 @@
                     android:text="Button 14"
                     android:textAllCaps="false" />
             </LinearLayout>
-
-            <WebView
-                android:id="@+id/wv_all"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:padding="0dp"
-                android:background="#666"></WebView>
 
         </LinearLayout>
     </ScrollView>
