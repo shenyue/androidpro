@@ -1,0 +1,242 @@
+####RelativeLayout 相对布局
+>线性布局是一种非常常用的布局，它可以通过相对定位的方式让控件出现在任何位置。
+
+####属性
+- **android:layout_alignParentLeft：**同父容器左对齐。
+- **android:layout_alignParentRight：**同父容器右对齐。
+- **android:layout_alignParentTop：**同父容器顶对齐。
+- **android:layout_alignParentBottom：**同父容器底对齐。
+- **android:layout_centerInParent：**在父容器中居中。
+ *以上取值均为 true | false*
+- **android:layout_above：**在某控件之上。
+- **android:layout_below：**在某控件之下。
+- **android:layout_toLeftOf：**在某控件左侧。
+- **android:layout_toRightOf：**在某控件右侧。
+- **android:layout_alignLeft：**同某控件左边缘对齐。
+- **android:layout_alignRight：**同某控件右边缘对齐。
+- **android:layout_alignTop：**同某控件顶边缘对齐。
+- **android:layout_alignBottom：**同某控件底边缘对齐。
+*以上取值均为 @id/xxx*
+
+####代码示例
+---
+*activity_relative_layout.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter03.RelativeLayoutActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/my_nav" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eeeeee"
+                android:padding="3dp"
+                android:text="相对于父容器布局"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <Button
+                    android:id="@+id/btn_rela_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 1"
+                    android:textAllCaps="false"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"/>
+
+                <Button
+                    android:id="@+id/btn_rela_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 2"
+                    android:textAllCaps="false"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"/>
+
+                <Button
+                    android:id="@+id/btn_rela_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 3"
+                    android:textAllCaps="false"
+                    android:layout_centerInParent="true"/>
+
+                <Button
+                    android:id="@+id/btn_rela_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 4"
+                    android:textAllCaps="false"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"/>
+
+                <Button
+                    android:id="@+id/btn_rela_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 5"
+                    android:textAllCaps="false"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eeeeee"
+                android:padding="3dp"
+                android:text="相对于Button 8布局"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <Button
+                    android:id="@+id/btn_rela_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 6"
+                    android:textAllCaps="false"
+                    android:layout_above="@id/btn_rela_8"
+                    android:layout_toLeftOf="@+id/btn_rela_8"/>
+
+                <Button
+                    android:id="@+id/btn_rela_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 7"
+                    android:textAllCaps="false"
+                    android:layout_above="@id/btn_rela_8"
+                    android:layout_toRightOf="@id/btn_rela_8"/>
+
+                <Button
+                    android:id="@+id/btn_rela_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 8"
+                    android:textAllCaps="false"
+                    android:layout_centerInParent="true"/>
+
+                <Button
+                    android:id="@+id/btn_rela_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 9"
+                    android:textAllCaps="false"
+                    android:layout_below="@id/btn_rela_8"
+                    android:layout_toLeftOf="@id/btn_rela_8"/>
+
+                <Button
+                    android:id="@+id/btn_rela_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 10"
+                    android:textAllCaps="false"
+                    android:layout_below="@id/btn_rela_8"
+                    android:layout_toRightOf="@id/btn_rela_8"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eeeeee"
+                android:padding="3dp"
+                android:text="相对于Button15布局"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+                <Button
+                    android:id="@+id/btn_rela_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 11"
+                    android:textAllCaps="false"
+                    android:layout_toLeftOf="@id/btn_rela_15"
+                    android:layout_alignTop="@id/btn_rela_15"/>
+                <Button
+                    android:id="@+id/btn_rela_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 12"
+                    android:textAllCaps="false"
+                    android:layout_above="@id/btn_rela_15"
+                    android:layout_alignRight="@id/btn_rela_15"/>
+                <Button
+                    android:id="@+id/btn_rela_13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 13"
+                    android:textAllCaps="false"
+                    android:layout_toRightOf="@id/btn_rela_15"
+                    android:layout_alignBottom="@id/btn_rela_15"/>
+                <Button
+                    android:id="@+id/btn_rela_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 14"
+                    android:textAllCaps="false"
+                    android:layout_below="@id/btn_rela_15"
+                    android:layout_alignLeft="@id/btn_rela_15"/>
+                <Button
+                    android:id="@+id/btn_rela_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button 15"
+                    android:textAllCaps="false"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <WebView
+                android:id="@+id/wv_arl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:padding="0dp"
+                android:background="#666"></WebView>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
+```
+---
+*RelativeActivity.java*
+```
+public class RelativeLayoutActivity extends MyBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_relative_layout);
+
+        toolBar = findViewById(R.id.mb_toolbar);
+        setSupportActionBar(toolBar);
+
+        // 加载webView
+        translateWebView(R.id.wv_arl, BLRaw.GITHUB_LAYOUT_RELATIVE);
+    }
+}
+```
+---
+
