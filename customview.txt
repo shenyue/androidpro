@@ -1,0 +1,118 @@
+####Custom View
+>除了系统提供的View之外，我们可以定义自己的View，然后引入到xml中。
+>本文将以自定义导航栏为示例。
+
+####自定义导航栏
+- 我们先创建一个navigation.xml文件，其中有左侧返回按钮，标题栏，右侧辅助按钮。
+- 再创建自定义控件类。
+- 最后将自定义控件引入到活动中。
+
+####示例代码
+---
+*activity_com_navigation_bar.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff2311">
+
+    <Button
+        android:id="@+id/btn_cv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:text="Back"
+        android:textColor="#fff"/>
+    <TextView
+        android:id="@+id/tv_cv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="Title"
+        android:textColor="#fff"
+        android:textSize="24sp"/>
+    <Button
+        android:id="@+id/btn_cv_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:text="Edit"
+        android:textColor="#fff"/>
+
+</LinearLayout>
+```
+---
+*CustomNavigationBar.java*
+```
+public class CustomNavigationBar extends LinearLayout {
+
+    public Button btnBack;
+    public TextView titleView;
+    public Button btnEdit;
+
+    public CustomNavigationBar(final Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        LayoutInflater.from(context).inflate(R.layout.activity_com_navigation_bar, this);
+        btnBack = findViewById(R.id.btn_cv_back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Activity)getContext()).finish();
+            }
+        });
+        titleView = findViewById(R.id.tv_cv_title);
+        btnEdit = findViewById(R.id.btn_cv_edit);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "You Clicked Edit",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+}
+```
+---
+*activity_custom_view.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter03.CustomViewActivity"
+    android:orientation="vertical">
+
+    <com.bl.blandroidpro.common.CustomNavigationBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+```
+>注意：
+>com.bl.blandroidpro.common.CustomNavigationBar：此处路径需改成你自己包的全路径。
+---
+*CustomViewActivity.java*
+```
+public class CustomViewActivity extends MyBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_custom_view);
+
+        // 隐藏系统自带的导航栏
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
+    }
+}
+```
+---
