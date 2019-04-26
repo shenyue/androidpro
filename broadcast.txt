@@ -1,0 +1,172 @@
+####广播 Broadcast 
+>Android的广播机制非常灵活，每个App可以注册自己感兴趣的广播，这样就能保证只接收自己关心的广播，这些广播可能来自系统，也可能来自其他App，安卓提供了一整套API，允许应用程序自由收发广播。广播可以跨进程通信。
+
+####广播类型
+- **标准广播 Normal broadcasts**  异步发出，所有广播接收器同时接收，无法截断。 
+- **有序广播 Ordered broadcasts**  同步发出，同一时刻只有一个广播接收器能接收，逻辑完成后，才向后传递，可截断。
+
+####广播接收器 Broadcast Receiver
+>自定义的广播接收器 不要在onReceive()方法中添加耗时操作，因为广播接收器中不允许开启线程，所以耗时过长则导致App崩溃。
+
+####广播接收器注册方式
+- **动态注册**  代码中注册。只能程序运行时起作用。
+- **静态注册**  AndroidManifest.xml中注册。程序不运行时也可以。
+
+####动态注册
+用IntentFilter定义什么样的广播，
+用接收器做某些业务处理，
+用registerReceiver()方法将二者建立关联。
+>注意：千万别忘了在onDestroy方法中注销。
+```
+// 实话一个intentFilter
+IntentFilter intentFilter= new IntentFilter();
+// 添加action 字符串是系统广播 网络连接的KEY
+intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+// 实例化接收器
+MyReceiver mReceiver = new MyReceiver();
+// 注册接收器
+registerReceiver(mReceiver, intentFilter);
+// 注销接收器
+unregisterReceiver(mReceiver);
+```
+
+####静态注册
+*IDE创建*
+*包名右键  >>  New >> Other >> Broadcast Rceiver*
+*输入名称，勾选Exported，Enabled  >>  点完成*
+- Exported：允许此广播接收本程序以外的广播，
+- Enabled：是否启用这个广播接收器。
+创建之后，**AndroidManifest.xml**中会自动注册一个**receiver**。
+```
+<receiver
+    android:name=".chapter05.CustomReceiver"
+    android:enabled="true"
+    android:exported="true">
+    <intent-filter android:priority="100"> <!-- priority 优先级别 -->
+        <!-- 自定义广播 -->
+        <action android:name="com.bl.blandroidpro.CUSTOM_BROADCAST" />
+    </intent-filter>
+</receiver>
+```
+**Activity**中
+```
+// 实例化Intent
+Intent intent = new Intent("com.bl.blandroidpro.CUSTOM_BROADCAST");
+// 发送广播
+sendBroadcast(intent);
+// 发送有序广播
+sendOrderedBroadcast(intent);
+// 有序广播截断
+abortBroadcast();
+```
+
+####本地广播LocalBroadcast
+对于系统全局广播，可接收任何App发送的广播，发出的广播也可被任何App接收，所以不安全。
+而本地广播只能在App内传播，并且只能接收该App发出的广播，所以安全可靠。
+```
+// 注册广播接收器
+// 本地广播通过**LocalBroadcastManager**进行管理
+LocalBroadcastManager localManager = LocalBroadcastManager.getInstance(this);
+IntentFilter filter = new IntentFilter();
+filter.addAction("com.bl.blandroidpro.CUSTOM_BROADCAST");
+// 实例化接收器
+LocalReceiver receiver = new LocalReceiver();
+// 注册接收器
+localManager.registerReceiver(receiver, filter);
+
+
+// 发送广播
+// 实例化Intent
+Intent intent = new Intent("com.bl.blandroidpro.CUSTOM_BROADCAST");
+// 发送广播
+localManager.sendBroadcast(intent);
+// 注销接收器
+localManager.unregisterReceiver(mReceiver);
+```
+
+####示例代码
+---
+*activity_broadcast_local.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter05.BroadcastLocalActivity"
+    android:orientation="vertical">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_bcl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="发送本地广播" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*BroadcastLocalActivity.java*
+```
+public class BroadcastLocalActivity extends AppCompatActivity {
+
+    private IntentFilter mIntentFilter;
+    private LocalReceiver mLocalReceiver;
+    private LocalBroadcastManager mLocalBroadcastManager;
+
+    public class LocalReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "This is my local broadcast"
+                    , Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_broadcast_local);
+
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("com.bl.blandroidpro.LOCAL_BROADCAST");
+        mLocalReceiver = new LocalReceiver();
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
+        mLocalBroadcastManager.registerReceiver(mLocalReceiver, mIntentFilter);
+
+        Button btn = findViewById(R.id.btn_bcl);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("com.bl.blandroidpro.LOCAL_BROADCAST");
+                mLocalBroadcastManager.sendBroadcast(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocalBroadcastManager.unregisterReceiver(mLocalReceiver);
+    }
+}
+```
+---
+
+
+
+
+
+
