@@ -1,0 +1,162 @@
+####VideoView播放器
+
+####示例代码
+---
+*申请权限*
+*AndroidManifest.xml*
+```
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+---
+*activity_video_player.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter08.VideoPlayerActivity"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_vp_play"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="播放"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/btn_vp_pause"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="暂停"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/btn_vp_replay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="重播"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <VideoView
+                android:id="@+id/vv_vp_1"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*VideoPlayerActivity.java*
+```
+public class VideoPlayerActivity extends AppCompatActivity {
+
+    private VideoView mVideoView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_video_palyer);
+
+        mVideoView = findViewById(R.id.vv_vp_1);
+
+        // 播放
+        Button btn_vp_play = findViewById(R.id.btn_vp_play);
+        btn_vp_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mVideoView.isPlaying()) {
+                    mVideoView.start();
+                }
+            }
+        });
+
+        // 暂停
+        Button btn_vp_pause = findViewById(R.id.btn_vp_pause);
+        btn_vp_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mVideoView.isPlaying()) {
+                    mVideoView.pause();
+                }
+            }
+        });
+
+        // 停止
+        Button btn_vp_replay = findViewById(R.id.btn_vp_replay);
+        btn_vp_replay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mVideoView.isPlaying()) {
+                    mVideoView.resume();
+                }
+            }
+        });
+
+        // 请求权限
+        if (ContextCompat.checkSelfPermission(VideoPlayerActivity.this
+                , Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(VideoPlayerActivity.this,
+                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            initVideoPath();
+        }
+    }
+
+    private void initVideoPath() {
+        try {
+            // 创建文件
+            File file = new File(Environment.getExternalStorageDirectory(), "test.mp4");
+            // 设置路径
+            mVideoView.setVideoPath(file.getPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initVideoPath();
+                } else {
+                    Toast.makeText(this,
+                            "拒绝权限将无法使用程序", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mVideoView != null) {
+            mVideoView.suspend();
+        }
+    }
+}
+
+```
+---
