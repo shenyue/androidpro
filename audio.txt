@@ -1,0 +1,149 @@
+####MediaPlay 播放器
+
+####示例代码
+---
+*申请权限*
+*AndroidManifest.xml*
+```
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+---
+*activity_audio_player.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter08.AudioPlayerActivity"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_ap_play"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="播放" />
+            <Button
+                android:id="@+id/btn_ap_pause"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="暂停" />
+
+            <Button
+                android:id="@+id/btn_ap_stop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="停止" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*AudioPlayerActivity.java*
+```
+public class AudioPlayerActivity extends AppCompatActivity {
+
+    private MediaPlayer mMediaPalyer = new MediaPlayer();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_audio_player);
+
+        // 播放
+        Button btn_ap_play = findViewById(R.id.btn_ap_play);
+        btn_ap_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mMediaPalyer.isPlaying()) {
+                    mMediaPalyer.start();
+                }
+            }
+        });
+
+        // 暂停
+        Button btn_ap_pause = findViewById(R.id.btn_ap_pause);
+        btn_ap_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMediaPalyer.isPlaying()) {
+                    mMediaPalyer.pause();
+                }
+            }
+        });
+
+        // 停止
+        Button btn_ap_stop = findViewById(R.id.btn_ap_stop);
+        btn_ap_stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMediaPalyer.isPlaying()) {
+                    mMediaPalyer.stop();
+                }
+            }
+        });
+
+        // 请求权限
+        if (ContextCompat.checkSelfPermission(AudioPlayerActivity.this
+                , Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AudioPlayerActivity.this,
+                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            initMediaPlayer();
+        }
+    }
+
+    private void initMediaPlayer() {
+        try {
+            // 读取音频文件
+            File file = new File(Environment.getExternalStorageDirectory(), "test.wav");
+            // 设置音频文件
+            mMediaPalyer.setDataSource(file.getPath());
+            // 预编译
+            mMediaPalyer.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initMediaPlayer();
+                } else {
+                    Toast.makeText(this,
+                            "拒绝权限将无法使用程序", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                break;
+                default:
+                    break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mMediaPalyer != null) {
+            mMediaPalyer.stop();
+            mMediaPalyer.release();
+        }
+    }
+}
+```
+---
