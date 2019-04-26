@@ -1,0 +1,261 @@
+####从拍照，相册中获取图片
+>直接上代码吧
+
+####示例代码
+---
+*申请权限*
+*AndroidManifest.xml*
+```
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+---
+*activity_camera.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter08.CameraActivity"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_c_use_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="使用相机拍照" />
+            <Button
+                android:id="@+id/btn_c_use_lib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="从相册选取" />
+
+            <ImageView
+                android:id="@+id/iv_c_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*CameraActivity.java*
+```
+public class CameraActivity extends AppCompatActivity {
+
+    private static final int TAKE_PHOTO = 1;
+    private static final int CHOOSE_PHOTO = 2;
+    private ImageView iv_c_image;
+    private Uri imageUri;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera);
+
+        iv_c_image = findViewById(R.id.iv_c_image);
+
+        // 使用相机拍照
+        Button btn_c_use_camera = findViewById(R.id.btn_c_use_camera);
+        btn_c_use_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 创建一个文件去接收图片
+                File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
+                try {
+                    // 存在该文件删除
+                    if (outputImage.exists()) {
+                        outputImage.delete();
+                    }
+                    outputImage.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // 获取该文件的uri
+                if (Build.VERSION.SDK_INT >= 24) {
+                    imageUri = FileProvider.getUriForFile(CameraActivity.this,
+                            "com.bl.blandroidpro.fileprovider", outputImage);
+                } else {
+                    imageUri = Uri.fromFile(outputImage);
+                }
+                // 创建打开相机意图
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                // 用此文件接收拍照后的图片
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                // 打开相机
+                startActivityForResult(intent, TAKE_PHOTO);
+            }
+        });
+
+        // 从相册选取
+        Button btn_c_use_lib = findViewById(R.id.btn_c_use_lib);
+        btn_c_use_lib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 请求权限
+                if (ContextCompat.checkSelfPermission(CameraActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CameraActivity.this,
+                            new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}
+                            , 1);
+                } else {
+                    openAlbum();
+                }
+            }
+        });
+    }
+
+    public void openAlbum() {
+        // 创建打开相册意图
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        // 设置获取类型
+        intent.setType("image/*");
+        // 打开相册
+        startActivityForResult(intent, CHOOSE_PHOTO);
+    }
+
+    /**
+     * 请求权限回调
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this,
+                            "You denied the permission", Toast.LENGTH_LONG).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 关闭相机或相册回调
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        // 获取刚拍好图片
+                        Bitmap bitmap = BitmapFactory.decodeStream(
+                                getContentResolver().openInputStream(imageUri));
+                        iv_c_image.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    // Android 4.4以上 使用这个方法处理图片
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        handleImageOnKitKat(data);
+
+                    // Android 4.4以下 使用这个方法处理图片
+                    } else {
+                        handleImageBeforeKitKat(data);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Android 4.4+
+     * @param data
+     */
+    @TargetApi(19)
+    private void handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+
+        // 如果是 document 类型的 Uri，则通过 document id 处理
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                // 解析出数字格式的id
+                String id = docId.split(":")[1];
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contetnUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contetnUri, null);
+            }
+
+            // 如果是 content 类型的Uri，则使用普通方式处理
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = getImagePath(uri, null);
+
+            // 如果是 file 类型的 Uri，直接截取图片路径
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = uri.getPath();
+        }
+        // 根据图片路径显示
+        displayImage(imagePath);
+    }
+
+    /**
+     * Android 4.4-
+     * @param data
+     */
+    private void handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri,null);
+        displayImage(imagePath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过 Uri 和 Selection 来获取真是的图片路径
+        Cursor cursor = getContentResolver().query(uri,
+                null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            iv_c_image.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this,
+                    "failed to get image", Toast.LENGTH_LONG).show();
+        }
+    }
+}
+
+```
+---
