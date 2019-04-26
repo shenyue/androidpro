@@ -14,10 +14,11 @@ App中某些功能的执行需要申请Android系统权限，如打电话等。
 
 ####Android权限机制
 >**Android 6.0**之前安装app时，提示app需要获取某些权限，其中包括一些个人隐私相关，如地理位置等，但是这些app日常粘度很高，还不能不安，所以用户只能被迫同意安装。
-Android开发团队也意识到了这个问题，于是**Android 6.0**开始引入了**运行时权限**。但是安卓的权限很多，有上百个，如果让用户一个个授权也很繁琐，所以Android团队将权限分成两部分：普通权限 和 危险权限。只有危险权限才需要用户授权。
+Android开发团队也意识到了这个问题，于是**Android 6.0**开始引入了**运行时权限**。但是安卓的权限很多，有上百个，如果让用户一个个授权也很繁琐，所以Android团队将权限分成两部分：**普通权限** 和 **危险权限**。只有危险权限才需要用户授权。
 
 ####危险权限
 >Android的危险权限 一共9组 24个。每个权限属于一个权限组，同意其中一个权限就同意了同组中的所有权限。
+
 - **CALENDAR**
  *READ_CALENDAR*
  *WRITE_CALENDAR*
@@ -88,13 +89,13 @@ public void onRequestPermissionsResult(int requestCode,
 ```
 
 ####访问其他app的数据
-**ContentResolver**，通过该类访问其它app的数据。该类提供了CRUD操作的相关方法。
+**ContentResolver** 通过该类访问其它app的数据。该类提供了CRUD操作的相关方法。以**Uri**作为参数。
 - *insert()* 插入数据
 - *update()* 修改数据
 - *delete()* 删除数据
 - *query()* 查询数据
 
-**Uri**作为参数 
+**Uri参数格式及组成结构**
 以**path**结尾表示访问该表所有数据
 以**id**结尾表示仅访问此条数据
 '*'：匹配任意长度字符
@@ -162,7 +163,7 @@ private void readContacts() {
  *MIME类型*由3部分组成
 - 必须以vnd开头
 - 以path结尾，后接 android.cursor.dir/, 以id结尾android.cursor.item/
-- 最后接上vnd.<authority>.<path>
+- 最后接上vnd.'authority'.'path'
 ```
 // path结尾
 vnd.android.cursor.dir/vnd.com.exxample.app.provider.table1
