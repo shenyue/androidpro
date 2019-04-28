@@ -15,6 +15,11 @@ Snackbar.make(v, "Clicked It", Snackbar.LENGTH_LONG)
     }).show();
 ```
 
+####CoordinatorLayout
+>是一个加强版的FrameLayout，它可以监控子控件的各种事件，帮助我们做出最合理的响应。
+>如snackbar弹出，FloatingActionButton位置自动跟随上移，不被遮挡。
+
+
 ####示例代码
 ---
 *activity_floating_action_button.xml*
