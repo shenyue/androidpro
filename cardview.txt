@@ -1,0 +1,236 @@
+####CardView 卡片布局
+>展示效果如同将内容放在卡片中一样，提供圆角，投影等。
+**build.gradle中添加依赖**
+```
+implementation 'com.android.support:cardview-v7:28.0.0'
+```
+
+####AppBarLayout
+>加强版的垂直LinearLayout，内部做了很多滚动事件相关的封装。
+
+####SwipeRefreshLayout 下拉刷新
+>support-v4中提供
+
+####示例代码
+---
+*build.gradle*
+```
+implementation 'com.android.support:cardview-v7:28.0.0'
+```
+---
+*Fruit.java*
+```
+public class Fruit {
+
+    private String name;
+    private int imageId;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    public Fruit(String name, int imageId) {
+        this.name = name;
+        this.imageId = imageId;
+    }
+
+}
+```
+---
+*FruitAdapter.java*
+```
+public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> {
+
+    private Context mContext;
+    private List<Fruit> mFruitList;
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        CardView cardView;
+        ImageView fruitImage;
+        TextView fruitName;
+
+        public ViewHolder(View view) {
+            super(view);
+            cardView = (CardView)view;
+            fruitImage = ((CardView) view).findViewById(R.id.fi_iv_fruit_image);
+            fruitName = ((CardView) view).findViewById(R.id.fi_tv_fruit_name);
+        }
+    }
+
+    public FruitAdapter(List<Fruit> fruitList) {
+        mFruitList = fruitList;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        if (mContext == null) {
+            mContext = viewGroup.getContext();
+        }
+        View view = LayoutInflater.from(mContext)
+                .inflate(R.layout.fruit_item, viewGroup, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        Fruit fruit = mFruitList.get(i);
+        viewHolder.fruitName.setText(fruit.getName());
+        Glide.with(mContext).load(fruit.getImageId()).into(viewHolder.fruitImage);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mFruitList.size();
+    }
+}
+
+```
+---
+*activity_card_view.xml*
+```
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter12.CardViewActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/cv_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_scrollFlags="scroll|enterAlways|snap"/>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/cv_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/cv_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/cv_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_launcher" />
+    </android.support.design.widget.CoordinatorLayout>
+
+</android.support.v4.widget.DrawerLayout>
+```
+---
+*CardViewActivity.java*
+```
+public class CardViewActivity extends AppCompatActivity {
+
+    private DrawerLayout mDrawerLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private Fruit[] fruits = {new Fruit("Apple", R.drawable.apple)
+            , new Fruit("Banana", R.drawable.banana)
+            , new Fruit("Apple", R.drawable.apple)
+            , new Fruit("Banana", R.drawable.banana)
+            , new Fruit("Apple", R.drawable.apple)
+            , new Fruit("Banana", R.drawable.banana)
+            , new Fruit("Apple", R.drawable.apple)
+            , new Fruit("Banana", R.drawable.banana)};
+
+    private List<Fruit> fruitList = new ArrayList<>();
+
+    private FruitAdapter adapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_card_view);
+
+        // 数据源制作
+        initFruits();
+        RecyclerView recyclerView = findViewById(R.id.cv_rv);
+        // 栅格布局
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        adapter = new FruitAdapter(fruitList);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+        // 下拉刷新
+        mSwipeRefreshLayout = findViewById(R.id.cv_refresh);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshFruits();
+            }
+        });
+    }
+
+    /**
+     * 模拟刷新请求数据
+      */
+    private void refreshFruits() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initFruits();
+                        adapter.notifyDataSetChanged();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * 初始化数据源
+     */
+    private void initFruits() {
+        fruitList.clear();
+        for (int i=0; i<50; i++) {
+            Random random = new Random();
+            int index = random.nextInt(fruits.length);
+            fruitList.add(fruits[index]);
+        }
+    }
+}
+```
+---
