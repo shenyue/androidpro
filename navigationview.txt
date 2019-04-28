@@ -1,0 +1,146 @@
+####DrawerLayout
+>滑动菜单就是将菜单选项隐藏起来，不直接在主屏幕显示，而是通过滑动显示。
+
+####NavigtionView
+>导航视图
+
+####创建优美的滑动导航菜单
+- 添加依赖circleiamgeview
+- 准备menu菜单
+- 准备导航菜单头
+
+####示例代码
+---
+*build.gradle*
+```
+implementation 'de.hdodenhof:circleimageview:2.1.0'
+```
+---
+*nav_menu.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nv_nav_call" android:title="Call" android:icon="@drawable/call" />
+    <item android:id="@+id/nv_nav_friend" android:title="Friend" android:icon="@drawable/friend"/>
+    <item android:id="@+id/nv_nav_location" android:title="Location" android:icon="@drawable/location" />
+    <item android:id="@+id/nv_nav_mail" android:title="Mail" android:icon="@drawable/mail"/>
+    <item android:id="@+id/nv_nav_task" android:title="Settings" android:icon="@drawable/setting"/>
+</menu>
+```
+---
+*nav_header.xml*
+```
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="?attr/colorPrimary"
+    android:padding="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/icon_nv_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/tv_nv_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="5432154@qq.com"
+        android:textColor="#FFF"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_nv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="伊隆·马斯克"
+        android:layout_above="@+id/tv_nv_mail"
+        android:textColor="#FFF"
+        android:textSize="14sp" />
+</RelativeLayout>
+```
+---
+*activity_navigation_view.xml*
+```
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dl_nv_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_nv_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    </FrameLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nv_nav_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/nav_menu"
+        app:headerLayout="@layout/nav_header"/>
+
+</android.support.v4.widget.DrawerLayout>
+```
+---
+*NavigationViewActivity.java*
+```
+public class NavigationViewActivity extends AppCompatActivity {
+
+    DrawerLayout mDrawerLayout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_navigation_view);
+
+        Toolbar toolbar = findViewById(R.id.tb_nv_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.wmenu);
+        }
+
+        mDrawerLayout =  findViewById(R.id.dl_nv_1);
+
+        NavigationView navView = findViewById(R.id.nv_nav_1);
+        navView.setCheckedItem(R.id.nv_nav_call);
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+}
+```
+---
+
+
