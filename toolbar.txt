@@ -1,0 +1,111 @@
+####Toolbar
+>比ActionBar更灵活，可用于各种位置，由于ActionBar已经不推荐使用，此app中不在介绍。
+
+####属性颜色对应的位置
+**res/values/styles.xml**中配置
+```
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+</resources>
+```
+![属性颜色位置.jpg](https://upload-images.jianshu.io/upload_images/15047809-f21a9db1dfea0552.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+####创建自定义的toolbar
+>新建自定义menu.xml
+>引入toolbar组件
+
+####示例代码
+---
+*menu.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/tb_backup"
+        android:title="备份"
+        app:showAsAction="always"
+        android:icon="@drawable/backup"></item>
+    <item android:id="@+id/tb_delete"
+        android:title="删除"
+        android:icon="@drawable/delete"
+        app:showAsAction="ifRoom"></item>
+    <item android:id="@+id/tb_settings"
+        android:title="设置"
+        android:icon="@drawable/setting"
+        app:showAsAction="never"></item>
+</menu>
+```
+---
+*activity_toolbar.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter12.ToolbarActivity"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar_1"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+</LinearLayout>
+```
+*ToolbarActivity.java*
+```
+public class ToolbarActivity extends MyBaseActivity {
+
+    Toolbar tb_toolbar_1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_toolbar);
+
+        tb_toolbar_1 = findViewById(R.id.tb_toolbar_1);
+        setSupportActionBar(tb_toolbar_1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.tb_backup:
+                Toast.makeText(this, "clicked backup", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.tb_delete:
+                Toast.makeText(this, "clicked delete", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.tb_settings:
+                Toast.makeText(this, "clicked setting", Toast.LENGTH_LONG).show();
+                break;
+                default:
+                    break;
+        }
+        return true;
+    }
+}
+
+```
+---
+
+
