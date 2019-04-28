@@ -1,6 +1,20 @@
 ####FloatingActionButton 悬浮按钮
 >悬浮按钮时DesignSupport库的一个控件，可以帮助我们轻松实现悬浮按钮的功能。
 
+####Snackbar 可交互提示条
+>Toast不能交互，仅提供展示，Snackbar可交互。
+```
+Snackbar.make(v, "Clicked It", Snackbar.LENGTH_LONG)
+    .setAction("Click", new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(FloatingActionButtonActivity.this,
+                "Clicked FloatingActionButton then Clicked Snackbar",
+                Toast.LENGTH_LONG).show();
+            }
+    }).show();
+```
+
 ####示例代码
 ---
 *activity_floating_action_button.xml*
