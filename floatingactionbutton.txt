@@ -1,0 +1,57 @@
+####FloatingActionButton 悬浮按钮
+>悬浮按钮时DesignSupport库的一个控件，可以帮助我们轻松实现悬浮按钮的功能。
+
+####示例代码
+---
+*activity_floating_action_button.xml*
+```
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/dl_fab">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_btn_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_launcher_background"
+            android:elevation="8dp" />
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.DrawerLayout>
+```
+---
+*FloatingActionButton.java*
+```
+public class FloatingActionButtonActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_floating_action_button);
+
+        DrawerLayout layout = findViewById(R.id.dl_fab);
+        FloatingActionButton btn = findViewById(R.id.fab_btn_1);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Clicked It", Snackbar.LENGTH_LONG)
+                        .setAction("Click", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(FloatingActionButtonActivity.this,
+                                        "Clicked FloatingActionButton then Clicked Snackbar",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }).show();
+            }
+        });
+    }
+}
+```
+---
