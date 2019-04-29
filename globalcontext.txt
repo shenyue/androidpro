@@ -1,0 +1,102 @@
+####全局Context
+>在许多方法执行的时候，都需要context做为参数。当你自己封装工具类等很多时候，你会获取不到，怎么办？全局Context解决了上述问题。
+
+####实现
+>新建MyApplication类继承Application，单例模式实现globalcontext。
+>修改**AndroidManifest.xml**文件中**application**标签的**android:name**属性。
+>调用
+```
+BLApplication.getContext();
+```
+
+####示例代码
+---
+*BLApplication.java*
+```
+public class BLApplication extends Application {
+
+    private static Context sContext;
+
+    @Override
+    public void onCreate() {
+        sContext = getApplicationContext();
+    }
+
+    public static Context getContext() {
+        return sContext;
+    }
+
+    public static void initialize(Context context) {
+        if (context != null) {
+            sContext = context;
+        }
+    }
+}
+```
+---
+*AndroidManifest.xml*
+```
+<application
+        android:name=".chapter13.BLApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+</application>
+```
+---
+*activity_global_context.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter13.GlobalContextActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_gc_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="使用全局context的Toast" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*GlobalContextActivity.java*
+```
+public class GlobalContextActivity extends MyBaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_global_context);
+
+        Button btn_gc_1 = findViewById(R.id.btn_gc_1);
+        btn_gc_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BLApplication.getContext(),
+                        "This is Toast used GolbalContext", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+}
+```
+---
