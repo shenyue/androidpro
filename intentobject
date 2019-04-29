@@ -1,0 +1,275 @@
+####用Intent传递对象
+>用Intent传递基本数据类型 字符串 数组等，大家都已经轻车熟路了，但传递参数类型不仅仅于此，我们还可以传递对象作为参数。
+
+####传递方式
+- **Serializable**方式：将整个对象序列化并传递。
+- **Parcelable**方式：将完整的对象分解成Intent支持的数据类型，再传递。
+
+####Serializable方式
+对象实现Serializable接口，Intent调用getSerializableExtra()获取参数。
+
+####Parcelable方式
+对象实现Parcelable接口，重写describeContents(),wtiteToParcel()，提供一个CREATE常量。
+
+####示例代码
+---
+*TestPersonSerializable.java*
+```
+public class TestPersonSerializable implements Serializable {
+
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String description() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" name : ").append(name).append(" ,");
+        sb.append(" age : ").append(age).append("\n");
+        return sb.toString();
+    }
+}
+```
+---
+*TestPersonParcelable.java*
+```
+public class TestPersonParcelable implements Parcelable {
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // 此处将各个属性调用对应方法全部写出
+        dest.writeString(name);
+        dest.writeInt(age);
+    }
+
+    /**
+     * CREATOR常量
+     */
+    public static final Parcelable.Creator<TestPersonParcelable> CREATOR =
+            new Parcelable.Creator<TestPersonParcelable>() {
+                @Override
+                public TestPersonParcelable createFromParcel(Parcel source) {
+                    TestPersonParcelable person = new TestPersonParcelable();
+                    person.name = source.readString();
+                    person.age = source.readInt();
+                    return person;
+                }
+
+                @Override
+                public TestPersonParcelable[] newArray(int size) {
+                    return new TestPersonParcelable[size];
+                }
+            };
+
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String description() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" name : ").append(name).append(" ,");
+        sb.append(" age : ").append(age).append("\n");
+        return sb.toString();
+    }
+}
+```
+---
+*activity_intent_object_one.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter13.IntentObjectOneActivity"
+    android:orientation="vertical">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_ioo_serializable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Serializable 实现" />
+            <Button
+                android:id="@+id/btn_ioo_parcelable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Parcelable 实现" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="反馈回来的数据"/>
+            <TextView
+                android:id="@+id/tv_ioo_res"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*IntentObjectOneActivity.java*
+```
+public class IntentObjectOneActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_intent_object_one);
+
+        Button btn_ioo_serializable = findViewById(R.id.btn_ioo_serializable);
+        btn_ioo_serializable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TestPersonSerializable person = new TestPersonSerializable();
+                person.setName("DJ Serializable");
+                person.setAge(80);
+                Intent intent = new Intent(
+                        BLApplication.getContext(), IntentObjectTwoActivity.class);
+                intent.putExtra("person", person);
+                intent.putExtra("type", 1);
+                startActivity(intent);
+            }
+        });
+
+        Button btn_ioo_parcelable = findViewById(R.id.btn_ioo_parcelable);
+        btn_ioo_parcelable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TestPersonParcelable person = new TestPersonParcelable();
+                person.setName("DJ Parcelable");
+                person.setAge(80);
+                Intent intent = new Intent(
+                        BLApplication.getContext(), IntentObjectTwoActivity.class);
+                intent.putExtra("person", person);
+                intent.putExtra("type", 2);
+                startActivity(intent);
+            }
+        });
+    }
+}
+
+```
+---
+*activity_intent_object_two.xml*
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chapter13.IntentObjectTwoActivity"
+    android:orientation="vertical">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_iot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="返回" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="传递过回的Object数据"/>
+            <TextView
+                android:id="@+id/tv_iot_res"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+```
+---
+*IntentObjectTwoActivity.java*
+```
+public class IntentObjectTwoActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_intent_object_two);
+
+        Button btn_iot = findViewById(R.id.btn_iot);
+        btn_iot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        TextView tv_iot_res = findViewById(R.id.tv_iot_res);
+        int type = getIntent().getIntExtra("type", 0);
+        if (type == 1) {
+            TestPersonSerializable person = (TestPersonSerializable) getIntent()
+                    .getSerializableExtra("person");
+            tv_iot_res.setText(person.description());
+        } else if (type == 2) {
+            TestPersonParcelable person = (TestPersonParcelable) getIntent()
+                    .getParcelableExtra("person");
+            tv_iot_res.setText(person.description());
+        }
+
+    }
+}
+```
+---
